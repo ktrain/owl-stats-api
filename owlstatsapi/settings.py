@@ -135,6 +135,18 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10,
 }
 
+
+# SSL
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+SECURE_SSL_REDIRECT = os.environ.get('SECURE_SSL_REDIRECT', False)
+
+SESSION_COOKIE_SECURE = os.environ.get('SESSION_COOKIE_SECURE', False)
+
+
+# Local/env settings
+
 try:
     from .local_settings import *
 except Exception as e:
