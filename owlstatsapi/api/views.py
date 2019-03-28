@@ -1,8 +1,15 @@
 from django.contrib.auth.models import User, Group
 from owlstatsapi.api.models import Role, Team, Player, PlayerWeek
-from rest_framework import viewsets
+from rest_framework import mixins, viewsets
+from rest_framework.permissions import BasePermission, SAFE_METHODS, \
+    IsAdminUser, IsAuthenticated, IsAuthenticatedOrReadOnly
 from owlstatsapi.api.serializers import UserSerializer, GroupSerializer, \
     RoleSerializer, TeamSerializer, PlayerSerializer, PlayerWeekSerializer
+
+
+class ReadOnly(BasePermission):
+    def has_permission(self, request, view):
+        return request.method in SAFE_METHODS
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -11,6 +18,7 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
+    permission_classes = (IsAdminUser|IsAuthenticated&ReadOnly, )
 
 
 class GroupViewSet(viewsets.ModelViewSet):
@@ -19,6 +27,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     """
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
+    permission_classes = (IsAdminUser|IsAuthenticated&ReadOnly, )
 
 
 class RoleViewSet(viewsets.ModelViewSet):
@@ -27,6 +36,7 @@ class RoleViewSet(viewsets.ModelViewSet):
     """
     queryset = Role.objects.all()
     serializer_class = RoleSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly, )
 
 
 class TeamViewSet(viewsets.ModelViewSet):
@@ -35,6 +45,7 @@ class TeamViewSet(viewsets.ModelViewSet):
     """
     queryset = Team.objects.all()
     serializer_class = TeamSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly, )
 
 
 class PlayerViewSet(viewsets.ModelViewSet):
@@ -43,11 +54,13 @@ class PlayerViewSet(viewsets.ModelViewSet):
     """
     queryset = Player.objects.all()
     serializer_class = PlayerSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly, )
 
 
 class PlayerWeekViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows weeks to be viewed or edited.
     """
-    queryset = PlayerWeek.objects.all()
+    queryset = PlayerWeek.objects.all().order_by('-number')
     serializer_class = PlayerWeekSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly, )
