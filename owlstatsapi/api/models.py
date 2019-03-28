@@ -46,3 +46,5 @@ class PlayerWeek(models.Model):
     updated_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return "Week {:d}".format(self.number)
+    class Meta:
+        verbose_name = 'Player-Week'
