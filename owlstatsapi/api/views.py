@@ -1,10 +1,10 @@
 from django.contrib.auth.models import User, Group
-from owlstatsapi.api.models import Role, Team, Player, PlayerWeek
+from owlstatsapi.api.models import Team, Player, PlayerWeek
 from rest_framework import mixins, viewsets
 from rest_framework.permissions import BasePermission, SAFE_METHODS, \
     IsAdminUser, IsAuthenticated, IsAuthenticatedOrReadOnly
 from owlstatsapi.api.serializers import UserSerializer, GroupSerializer, \
-    RoleSerializer, TeamSerializer, PlayerSerializer, PlayerWeekSerializer
+    TeamSerializer, PlayerSerializer, PlayerWeekSerializer
 
 
 class ReadOnly(BasePermission):
@@ -28,15 +28,6 @@ class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
     permission_classes = (IsAdminUser|IsAuthenticated&ReadOnly, )
-
-
-class RoleViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows roles to be viewed or edited.
-    """
-    queryset = Role.objects.all()
-    serializer_class = RoleSerializer
-    permission_classes = (IsAuthenticatedOrReadOnly, )
 
 
 class TeamViewSet(viewsets.ModelViewSet):

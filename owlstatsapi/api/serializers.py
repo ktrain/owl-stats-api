@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User, Group
-from owlstatsapi.api.models import Role, Team, Player, PlayerWeek
+from owlstatsapi.api.models import Team, Player, PlayerWeek
 from rest_framework import serializers
 
 
@@ -15,12 +15,6 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'url', 'name')
 
 
-class RoleSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Role
-        fields = ('id', 'name', )
-
-
 class TeamSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Team
@@ -30,7 +24,7 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
 class PlayerSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Player
-        fields = ('id', 'name', 'role')
+        fields = ('id', 'name', 'role', 'team')
 
 
 class PlayerWeekSerializer(serializers.HyperlinkedModelSerializer):
